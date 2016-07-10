@@ -11,5 +11,24 @@
            xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy"
            xmlns:ui="http://xmlns.oracle.com/soa/designer/"
            xmlns:sca-ext="http://xmlns.oracle.com/sca/1.0-ext">
+  <import namespace="http://xmlns.oracle.com/HelloWorldA/HelloWorldP/SayHello" location="WSDLs/SayHello.wsdl"
+          importType="wsdl"/>
+  <service name="sayhello_client_ep" ui:wsdlLocation="WSDLs/SayHello.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/HelloWorldA/HelloWorldP/SayHello#wsdl.interface(SayHello)"/>
+    <binding.ws port="http://xmlns.oracle.com/HelloWorldA/HelloWorldP/SayHello#wsdl.endpoint(sayhello_client_ep/SayHello_pt)"/>
+  </service>
   <property name="productVersion" type="xs:string" many="false">12.1.3.0.0</property>
+  <component name="SayHello" version="2.0">
+    <implementation.bpel src="BPEL/SayHello.bpel"/>
+    <componentType>
+      <service name="sayhello_client" ui:wsdlLocation="WSDLs/SayHello.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/HelloWorldA/HelloWorldP/SayHello#wsdl.interface(SayHello)"/>
+      </service>
+    </componentType>
+    <property name="bpel.config.transaction" type="xs:string" many="false">required</property>
+  </component>
+  <wire>
+    <source.uri>sayhello_client_ep</source.uri>
+    <target.uri>SayHello/sayhello_client</target.uri>
+  </wire>
 </composite>
